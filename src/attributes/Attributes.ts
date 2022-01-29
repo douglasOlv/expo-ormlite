@@ -1,6 +1,6 @@
 import { FieldTypes } from '../type';
 
-export abstract class Field {
+export abstract class Attributes {
   protected type: FieldTypes;
   protected isNullable = false;
   protected isPrimary = false;
@@ -17,7 +17,7 @@ export abstract class Field {
     if (this.isPrimary) {
       field.push('NOT NULL PRIMARY KEY AUTOINCREMENT');
     } else {
-      if (this.unique) field.push('UNIQUE');
+      if (this.isUnique) field.push('UNIQUE');
       if (!this.isNullable) field.push('NOT NULL');
       if (this.isAutoincrement) field.push('AUTOINCREMENT');
     }

@@ -1,16 +1,11 @@
-import { Numeric, Text } from './attributes';
-
-import { Fields } from './type';
+import { Schema } from './schema';
 
 export class Model {
-  static fields(): Fields {
-    return {};
-  }
+  table: string;
+  schema: Schema;
 
-  static numeric() {
-    return new Numeric();
-  }
-  static text() {
-    return new Text();
+  constructor(name: string, schema: Schema) {
+    this.table = name.toUpperCase();
+    this.schema = schema;
   }
 }

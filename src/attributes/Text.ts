@@ -1,6 +1,6 @@
-import { Field } from './Field';
+import { Attributes } from './Attributes';
 
-export class Text extends Field {
+export class Text extends Attributes {
   constructor() {
     super('TEXT');
   }
