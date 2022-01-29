@@ -1,8 +1,7 @@
-import { Type } from './Type';
+import { Field } from './Field';
 
-export class Text extends Type {
+export class Text extends Field {
   constructor() {
-    super();
-    this.type.push('TEXT');
+    super('TEXT');
   }
 }

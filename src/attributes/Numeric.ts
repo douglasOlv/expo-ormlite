@@ -1,8 +1,7 @@
-import { Type } from './Type';
+import { Field } from './Field';
 
-export class Numeric extends Type {
+export class Numeric extends Field {
   constructor() {
-    super();
-    this.type.push('NUMERIC');
+    super('NUMERIC');
   }
 }

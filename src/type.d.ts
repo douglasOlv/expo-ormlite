@@ -1,5 +1,4 @@
-import { Type } from './attributes/Type';
+import { Field } from './attributes/Field';
 
-export type FieldTypes = 'INTEGER' | 'FLOAT' | 'TEXT' | 'NUMERIC' | 'DATE' | 'DATETIME' | 'BOOLEAN' | 'JSON';
-
-type Fields = Record<string, Type>;
+type FieldTypes = 'INTEGER' | 'FLOAT' | 'TEXT' | 'NUMERIC' | 'DATE' | 'DATETIME' | 'BOOLEAN' | 'JSON';
+type Fields = Record<string, Field>;
