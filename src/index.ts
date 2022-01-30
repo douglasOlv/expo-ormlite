@@ -1,10 +1,5 @@
-import { Model } from './model';
+import { OrmLite } from './ ORMLite';
+import { Field } from './attributes';
 import { Schema } from './schema';
 
-export function model(name: string, schema: Schema) {
-  return class extends Model {
-    constructor() {
-      super(name, schema);
-    }
-  };
-}
+export { OrmLite, Schema, Field };
