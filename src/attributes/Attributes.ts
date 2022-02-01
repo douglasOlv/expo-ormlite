@@ -44,4 +44,8 @@ export abstract class Attributes {
     this.isUnique = true;
     return this;
   }
+
+  parseToObj(value: any) {
+    return value;
+  }
 }
