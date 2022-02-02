@@ -11,8 +11,9 @@ export abstract class Attributes {
     this.type = type;
   }
 
-  protected make() {
-    const field: string[] = [this.type];
+  /** @internal */
+  make(name: string) {
+    const field: string[] = [name, this.type];
 
     if (this.isPrimary) {
       field.push('NOT NULL PRIMARY KEY AUTOINCREMENT');
@@ -22,7 +23,7 @@ export abstract class Attributes {
       if (this.isAutoincrement) field.push('AUTOINCREMENT');
     }
 
-    return field.join(' ,');
+    return field.join(' ');
   }
 
   allowNull() {
