@@ -6,7 +6,7 @@ export class Schema {
     this.schema = schema;
   }
 
-  fields() {
+  get fields() {
     return Object.entries(this.schema);
   }
 }

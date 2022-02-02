@@ -3,8 +3,17 @@ import { Attributes } from './attributes/Attributes';
 type FieldTypes = 'INTEGER' | 'FLOAT' | 'TEXT' | 'NUMERIC' | 'DATE' | 'DATETIME' | 'BOOLEAN' | 'JSON';
 type Fields = Record<string, Attributes>;
 
-type SQLite =  { openDatabase: openDatabase };
+type SQLite = { openDatabase: openDatabase };
 
+type DatabaseConfig =
+  | string
+  | {
+      name: string;
+      version?: string;
+      description?: string;
+      size?: number;
+      callback?: () => any;
+    };
 interface Database {
   transaction(
     callback: (transaction: Transaction) => any,
@@ -33,15 +42,7 @@ interface ResultSet {
 }
 
 type openDatabase = (
-  name:
-    | string
-    | {
-        name: string;
-        version?: string;
-        description?: string;
-        size?: number;
-        callback?: () => any;
-      },
+  name: DatabaseConfig,
   version?: string,
   description?: string,
   size?: number,

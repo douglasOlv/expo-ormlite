@@ -1,18 +1,19 @@
 /* tslint:disable:max-classes-per-file */
-import { BaseModel } from './BaseModel';
+import { Repository } from './Repository';
 import { Schema } from './Schema';
-import { SQLite, Database } from './type';
+import { SQLite, Database, DatabaseConfig } from './type';
 
 export class OrmLite {
-  database: () => Database;
+  protected SQLite: SQLite;
+  protected opt: DatabaseConfig;
 
-  constructor(SQLite: SQLite, dbName: string) {
-    this.database = () => SQLite.openDatabase(dbName);
+  constructor(SQLite: SQLite, opt: DatabaseConfig) {
+    this.SQLite = SQLite;
+    this.opt = opt;
   }
 
-  model(name: string, schema: Schema): typeof BaseModel {
-    const Model = class extends BaseModel {};
-    Model.init(name, schema, this.database);
-    return Model;
+  model(name: string, schema: Schema): Repository {
+    const database = { db: this.SQLite, opt: this.opt };
+    return new Repository(name, schema, database);
   }
 }
