@@ -33,6 +33,13 @@ export class Repository extends Runner {
     return this.executeSql(sql, params);
   }
 
+  saveMany<T extends Object>(entitys: T[]) {
+    const fillEntitys = entitys.map((entity) => this.fill(entity));
+    const sqls = fillEntitys.map((entity) => this.buider.insertOrReplace(this.table, entity));
+    const params = fillEntitys.map((entity) => Object.values(entity));
+    return this.executeBulkSql(sqls, params);
+  }
+
   find<T extends Object>(where: T) {}
 
   findOne<T extends Object>(where: T) {}
