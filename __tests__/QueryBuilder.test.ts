@@ -44,6 +44,15 @@ describe('Query Buider', () => {
     expect(sql).toBe(expected);
   });
 
+  test('find register default operator', () => {
+    const expected = 'SELECT * FROM USERS WHERE born <= ? AND post_id = ? LIMIT 1;';
+    const where = { born_lteq: '1912-06-23', post_id: 2 };
+
+    const sql = builder.findOne(table, where);
+    expect(sql).toBe(expected);
+  });
+
+
   test('delete register', () => {
     const expected = 'DELETE FROM USERS WHERE id = ?;';
 

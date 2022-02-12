@@ -52,13 +52,17 @@ export class QueryBuilder {
     };
 
     const pieces = statement.split('_');
-    const key = pieces.pop() || '';
-    const property = pieces.join('_');
-    if (!operations.hasOwnProperty(key)) {
-      throw new Error('Operation not found, use (eq, neq, lt, lteq, gt, gteq, cont)');
+    const lastIndex = pieces.length - 1;
+    let keyOp = pieces[lastIndex];
+
+    if (Object.keys(operations).includes(keyOp)) {
+      pieces.pop();
+    } else {
+      keyOp = 'eq';
     }
 
-    const operator = operations[key];
+    const property = pieces.join('_');
+    const operator = operations[keyOp];
 
     return `${property} ${operator}`;
   }
