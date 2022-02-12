@@ -32,7 +32,34 @@ export class QueryBuilder {
     return `DROP TABLE IF EXISTS ${table};`;
   }
 
-  find(table: string) {
-    return `SELECT * FROM ${table} WHERE id = ? LIMIT 1;`;
+  find<T extends Object>(table: string, opt: T) {
+    const list = Object.keys(opt).map((p) => `${this.getPropertyOperator(p)} ?`);
+    return list.length > 0 ? `SELECT * FROM ${table} WHERE ${list.join(' AND ')};` : '';
+  }
+  findOne<T extends Object>(table: string, opt: T) {
+    return this.find(table, opt).replace(';', ' LIMIT 1;');
+  }
+
+  private getPropertyOperator(statement: string) {
+    const operations: Record<string, string> = {
+      eq: '=',
+      neq: '<>',
+      lt: '<',
+      lteq: '<=',
+      gt: '>',
+      gteq: '>=',
+      cont: 'LIKE',
+    };
+
+    const pieces = statement.split('_');
+    const key = pieces.pop() || '';
+    const property = pieces.join('_');
+    if (!operations.hasOwnProperty(key)) {
+      throw new Error('Operation not found, use (eq, neq, lt, lteq, gt, gteq, cont)');
+    }
+
+    const operator = operations[key];
+
+    return `${property} ${operator}`;
   }
 }

@@ -30,9 +30,17 @@ describe('Query Buider', () => {
 
   test('insert or replace', () => {
     const expected = 'INSERT OR REPLACE INTO USERS (id, born VALUES ?, ?);';
-    const obj = {id: 1, born: '1912-06-23' }
+    const obj = { id: 1, born: '1912-06-23' };
 
     const sql = builder.insertOrReplace(table, obj);
+    expect(sql).toBe(expected);
+  });
+
+  test('find register', () => {
+    const expected = 'SELECT * FROM USERS WHERE born >= ? AND post_id = ? LIMIT 1;';
+    const where = { born_gteq: '1912-06-23', post_id_eq: 2 };
+
+    const sql = builder.findOne(table, where);
     expect(sql).toBe(expected);
   });
 
