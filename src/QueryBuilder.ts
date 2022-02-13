@@ -17,7 +17,7 @@ export class QueryBuilder {
     const columns = schema.fields
       .map((field) => {
         const [name, attr] = field;
-        return attr.make(name);
+        return name.concat(attr.make());
       })
       .join(', ');
 
