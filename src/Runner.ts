@@ -1,4 +1,4 @@
-import { Database, DatabaseConfig, RunerInit, SQLite } from './type';
+import { Database, DatabaseConfig, RowSql, RunerInit, SQLite } from './type';
 
 export class Runner {
   protected sqlite: SQLite;
@@ -13,32 +13,33 @@ export class Runner {
     return this.sqlite.openDatabase(this.opt);
   }
 
-  executeBulkSql(sqls: Array<string>, params: Array<string[]>) {
+  executeBulkSql(sqls: Array<string>, params: Array<string[]>): Promise<RowSql[]> {
     return new Promise((txResolve, txReject) => {
-      this.openDatabase.transaction((tx) => {
+      this.openDatabase.transaction((tx) =>
         Promise.all(
-          sqls.map((sql, index) => {
-            return new Promise((sqlResolve, sqlReject) => {
-              tx.executeSql(
-                sql,
-                params[index],
-                (_, { rows, insertId }) => {
-                  sqlResolve({ rows: rows._array, insertId });
-                },
-                (_, error) => {
-                  sqlReject(error);
-                },
-              );
-            });
-          }),
+          sqls.map(
+            (sql, index): Promise<RowSql> =>
+              new Promise((sqlResolve, sqlReject) => {
+                tx.executeSql(
+                  sql,
+                  params[index],
+                  (_, { rows, insertId }) => {
+                    sqlResolve({ rows: rows._array, insertId });
+                  },
+                  (_, error) => {
+                    sqlReject(error);
+                  },
+                );
+              }),
+          ),
         )
           .then(txResolve)
-          .catch(txReject);
-      });
+          .catch(txReject),
+      );
     });
   }
 
   executeSql(sql: string, params: Array<string> = []) {
-    return this.executeBulkSql([sql], [params]);
+    return this.executeBulkSql([sql], [params]).then((value) => value[0]);
   }
 }

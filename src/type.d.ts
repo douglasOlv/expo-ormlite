@@ -50,3 +50,4 @@ type openDatabase = (
 ) => Database;
 
 type RunerInit = { sqlite: SQLite; opt: DatabaseConfig };
+type RowSql = { rows: any[]; insertId: number };

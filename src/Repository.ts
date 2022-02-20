@@ -31,7 +31,7 @@ export class Repository {
     const fillEntity = this.fill(entity);
     const sql = this.buider.insertOrReplace(this.table, fillEntity);
     const params = Object.values(fillEntity);
-    return this.runner.executeSql(sql, params);
+    return this.runner.executeSql(sql, params).then(({ insertId }) => insertId);
   }
 
   saveMany<T extends Object>(entitys: T[]) {
@@ -41,9 +41,15 @@ export class Repository {
     return this.runner.executeBulkSql(sqls, params);
   }
 
-  find<T extends Object>(where: T) {}
+  find<T extends Object>(where: T) {
+    const sql = this.buider.find(this.table, where);
+    return this.runner.executeSql(sql).then(({ rows }) => rows);
+  }
 
-  findOne<T extends Object>(where: T) {}
+  findOne<T extends Object>(where: T) {
+    const sql = this.buider.findOne(this.table, where);
+    return this.runner.executeSql(sql).then(({rows}) => rows[0] )
+  }
 
   createTable() {
     const sql = this.buider.createTable(this.table, this.schema);
