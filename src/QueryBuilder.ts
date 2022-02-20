@@ -44,7 +44,7 @@ export class QueryBuilder {
     return this.find(table, opt).replace(';', ' LIMIT 1;');
   }
 
-  private getPropertyOperator(statement: FieldWhere) {
+  private getPropertyOperator(statement: FieldWhere<any>) {
     const operations: Record<OpWhere, string> = {
       eq: '=',
       neq: '<>',
@@ -57,7 +57,7 @@ export class QueryBuilder {
 
     const pieces = statement.split('_');
     const lastIndex = pieces.length - 1;
-    let keyOp = pieces[lastIndex];
+    let keyOp: OpWhere = pieces[lastIndex];
 
     if (Object.keys(operations).includes(keyOp)) {
       pieces.pop();
