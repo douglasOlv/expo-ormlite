@@ -1,7 +1,7 @@
 import { Field } from '../src/attributes';
 
 describe('Field Integer', () => {
-  const num = Field.integer();
+  const num = Field.integer;
   test('integer type', () => {
     expect(Object(num).type).toBe('INTEGER');
   });
@@ -11,13 +11,13 @@ describe('Field Integer', () => {
   });
 
   test('integer primary key', () => {
-    num.primaryKey();
+    num.primaryKey;
     expect(Object(num).isPrimary).toBeTruthy();
   });
 });
 
 describe('Field Text', () => {
-  const text = Field.text();
+  const text = Field.text;
   test('text type', () => {
     expect(Object(text).type).toBe('TEXT');
   });
@@ -27,7 +27,7 @@ describe('Field Text', () => {
   });
 
   test('text nullable', () => {
-    text.allowNull();
+    text.allowNull;
     expect(Object(text).isNullable).toBeTruthy();
   });
 });

@@ -26,22 +26,22 @@ export abstract class Attributes {
     return ' '.concat(field.join(' '));
   }
 
-  allowNull() {
+ get allowNull() {
     this.isNullable = true;
     return this;
   }
 
-  autoIncrement() {
+ get autoIncrement() {
     this.isAutoincrement = true;
     return this;
   }
 
-  primaryKey() {
+ get primaryKey() {
     this.isPrimary = true;
     return this;
   }
 
-  unique() {
+ get unique() {
     this.isUnique = true;
     return this;
   }

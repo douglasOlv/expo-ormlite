@@ -1,6 +1,6 @@
 import { Schema } from './Schema';
 import { Runner } from './Runner';
-import { Database, DatabaseConfig, RunerInit, SQLite } from './type';
+import { Database, DatabaseConfig, FieldWhere, RunerInit, SQLite, WhereRecord } from './type';
 import { QueryBuilder } from './QueryBuilder';
 export class Repository {
   protected table: string;
@@ -44,19 +44,19 @@ export class Repository {
     return this.runner.executeBulkSql(sqls, params);
   }
 
-  find(where = {}) {
+  find(where: WhereRecord<string> = {}) {
     const sql = this.buider.find(this.table, where);
     const params = Object.values(where);
     return this.runner.executeSql(sql, params).then(({ rows }) => rows);
   }
 
-  findOne(where = {}) {
+  findOne(where: WhereRecord<string> = {}) {
     const sql = this.buider.findOne(this.table, where);
     const params = Object.values(where);
     return this.runner.executeSql(sql, params).then(({ rows }) => rows[0]);
   }
 
-  destroy(where = {}) {
+  destroy(where: WhereRecord<string>) {
     const sql = this.buider.destroy(this.table, where);
     const params = Object.values(where);
     return this.runner.executeSql(sql, params);

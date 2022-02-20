@@ -7,9 +7,9 @@ describe('OrmLite', () => {
   const Orm = new OrmLite(sqlite, opt);
 
   const schema = new Schema({
-    id: Field.integer().primaryKey(),
-    name: Field.text(),
-    post_id: Field.integer(),
+    id: Field.integer.primaryKey,
+    name: Field.text,
+    post_id: Field.integer,
   });
 
   const Users = Orm.model('Users', schema);
@@ -28,6 +28,10 @@ describe('OrmLite', () => {
 
   test('function findOne', () => {
     expect(typeof Users.findOne).toBe('function');
+  });
+
+  test('function destroy', () => {
+    expect(typeof Users.destroy).toBe('function');
   });
 
   test('function createTable', () => {

@@ -3,14 +3,14 @@ import { Numeric } from './Numeric';
 import { Text } from './Text';
 
 export class Field {
-  static integer() {
+  static get integer() {
     return new Integer();
   }
 
-  static numeric() {
+  static get numeric() {
     return new Numeric();
   }
-  static text() {
+  static get text() {
     return new Text();
   }
 }
