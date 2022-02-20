@@ -6,7 +6,7 @@ export class QueryBuilder {
     const columns = keys.join(', ');
     const values = keys.map(() => '?').join(', ');
 
-    return `INSERT INTO ${table} (${columns} VALUES ${values});`;
+    return `INSERT INTO ${table} (${columns}) VALUES (${values});`;
   }
 
   insertOrReplace<T extends Object>(table: string, obj: T) {
@@ -24,8 +24,9 @@ export class QueryBuilder {
     return `CREATE TABLE IF NOT EXISTS ${table} (${columns});`;
   }
 
-  destroy(table: string) {
-    return `DELETE FROM ${table} WHERE id = ?;`;
+  destroy(table: string, where: Object) {
+    const list = Object.keys(where).map((p) => `${this.getPropertyOperator(p)} ?`);
+    return `DELETE FROM ${table} WHERE ${list.join(' AND ')};`;
   }
 
   dropTable(table: string) {

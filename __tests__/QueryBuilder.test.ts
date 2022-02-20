@@ -29,7 +29,7 @@ describe('Query Buider', () => {
   });
 
   test('insert or replace', () => {
-    const expected = 'INSERT OR REPLACE INTO USERS (id, born VALUES ?, ?);';
+    const expected = 'INSERT OR REPLACE INTO USERS (id, born) VALUES (?, ?);';
     const obj = { id: 1, born: '1912-06-23' };
 
     const sql = builder.insertOrReplace(table, obj);
@@ -51,7 +51,6 @@ describe('Query Buider', () => {
     const sql = builder.findOne(table, where);
     expect(sql).toBe(expected);
   });
-
 
   test('delete register', () => {
     const expected = 'DELETE FROM USERS WHERE id = ?;';

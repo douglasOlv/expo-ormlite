@@ -21,7 +21,10 @@ export class Repository {
     this.schema.fields.forEach((item) => {
       const key = item[0];
       const { parseToObj } = item[1];
-      entity[key] = parseToObj(props[key]);
+
+      if (Object.keys(props).includes(key)) {
+        entity[key] = parseToObj(props[key]);
+      }
     });
 
     return entity;
@@ -43,16 +46,29 @@ export class Repository {
 
   find<T extends Object>(where: T) {
     const sql = this.buider.find(this.table, where);
-    return this.runner.executeSql(sql).then(({ rows }) => rows);
+    const params = Object.values(where);
+    return this.runner.executeSql(sql, params).then(({ rows }) => rows);
   }
 
   findOne<T extends Object>(where: T) {
     const sql = this.buider.findOne(this.table, where);
-    return this.runner.executeSql(sql).then(({rows}) => rows[0] )
+    const params = Object.values(where);
+    return this.runner.executeSql(sql, params).then(({ rows }) => rows[0]);
+  }
+
+  destroy<T extends Object>(where: T) {
+    const sql = this.buider.destroy(this.table, where);
+    const params = Object.values(where);
+    return this.runner.executeSql(sql, params);
   }
 
   createTable() {
     const sql = this.buider.createTable(this.table, this.schema);
-    return this.runner.executeSql(sql);
+    return this.runner.executeSql(sql, []);
+  }
+
+  dropTable() {
+    const sql = this.buider.dropTable(this.table);
+    return this.runner.executeSql(sql, []);
   }
 }
