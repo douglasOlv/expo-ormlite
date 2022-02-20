@@ -39,7 +39,7 @@ export class Runner {
     });
   }
 
-  executeSql(sql: string, params: Array<string>) {
+  executeSql(sql: string, params: Array<any>) {
     return this.executeBulkSql([sql], [params]).then((value) => value[0]);
   }
 }

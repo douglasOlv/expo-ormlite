@@ -24,7 +24,7 @@ export class QueryBuilder {
     return `CREATE TABLE IF NOT EXISTS ${table} (${columns});`;
   }
 
-  destroy(table: string, where: Object) {
+  destroy(table: string, where: Record<string, any>) {
     const list = Object.keys(where).map((p) => `${this.getPropertyOperator(p)} ?`);
     return `DELETE FROM ${table} WHERE ${list.join(' AND ')};`;
   }
@@ -33,11 +33,13 @@ export class QueryBuilder {
     return `DROP TABLE IF EXISTS ${table};`;
   }
 
-  find<T extends Object>(table: string, opt: T) {
+  find(table: string, opt: Record<string, any>) {
     const list = Object.keys(opt).map((p) => `${this.getPropertyOperator(p)} ?`);
-    return list.length > 0 ? `SELECT * FROM ${table} WHERE ${list.join(' AND ')};` : '';
+    const haveWhere = list.length > 0;
+
+    return haveWhere ? `SELECT * FROM ${table} WHERE ${list.join(' AND ')};` : `SELECT * FROM ${table};`;
   }
-  findOne<T extends Object>(table: string, opt: T) {
+  findOne(table: string, opt: Record<string, any>) {
     return this.find(table, opt).replace(';', ' LIMIT 1;');
   }
 
@@ -49,7 +51,7 @@ export class QueryBuilder {
       lteq: '<=',
       gt: '>',
       gteq: '>=',
-      cont: 'LIKE',
+      like: 'LIKE',
     };
 
     const pieces = statement.split('_');

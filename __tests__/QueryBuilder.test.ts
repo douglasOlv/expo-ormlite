@@ -21,7 +21,7 @@ describe('Query Buider', () => {
   });
 
   test('insert to', () => {
-    const expected = 'INSERT INTO USERS (nome, born VALUES ?, ?);';
+    const expected = 'INSERT INTO USERS (nome, born) VALUES (?, ?);';
     const obj = { nome: 'Alan Turing', born: '23 june 1912' };
 
     const sql = builder.insert(table, obj);
@@ -44,6 +44,13 @@ describe('Query Buider', () => {
     expect(sql).toBe(expected);
   });
 
+  test('find all register', () => {
+    const expected = 'SELECT * FROM USERS;';
+
+    const sql = builder.find(table, {});
+    expect(sql).toBe(expected);
+  });
+
   test('find register default operator', () => {
     const expected = 'SELECT * FROM USERS WHERE born <= ? AND post_id = ? LIMIT 1;';
     const where = { born_lteq: '1912-06-23', post_id: 2 };
@@ -55,7 +62,14 @@ describe('Query Buider', () => {
   test('delete register', () => {
     const expected = 'DELETE FROM USERS WHERE id = ?;';
 
-    const sql = builder.destroy(table);
+    const sql = builder.destroy(table, {id: 1});
+    expect(sql).toBe(expected);
+  });
+
+  test('delete register like', () => {
+    const expected = 'DELETE FROM USERS WHERE name LIKE ?;';
+
+    const sql = builder.destroy(table, {name_like: "Al%"});
     expect(sql).toBe(expected);
   });
 

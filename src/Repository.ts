@@ -44,19 +44,19 @@ export class Repository {
     return this.runner.executeBulkSql(sqls, params);
   }
 
-  find<T extends Object>(where: T) {
+  find(where = {}) {
     const sql = this.buider.find(this.table, where);
     const params = Object.values(where);
     return this.runner.executeSql(sql, params).then(({ rows }) => rows);
   }
 
-  findOne<T extends Object>(where: T) {
+  findOne(where = {}) {
     const sql = this.buider.findOne(this.table, where);
     const params = Object.values(where);
     return this.runner.executeSql(sql, params).then(({ rows }) => rows[0]);
   }
 
-  destroy<T extends Object>(where: T) {
+  destroy(where = {}) {
     const sql = this.buider.destroy(this.table, where);
     const params = Object.values(where);
     return this.runner.executeSql(sql, params);
