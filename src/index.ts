@@ -1,4 +1,4 @@
-import { OrmLite } from './ ORMLite';
+import { OrmLite } from './OrmLite';
 import { Field } from './attributes';
 import { Schema } from './schema';
 import { Repository } from './Repository';
