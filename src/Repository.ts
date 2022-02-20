@@ -1,14 +1,15 @@
 import { Schema } from './Schema';
 import { Runner } from './Runner';
-import { Database, DatabaseConfig, SQLite } from './type';
+import { Database, DatabaseConfig, RunerInit, SQLite } from './type';
 import { QueryBuilder } from './QueryBuilder';
-export class Repository extends Runner {
+export class Repository {
   protected table: string;
   protected schema: Schema;
   protected buider: QueryBuilder;
+  protected runner: Runner;
 
-  constructor(table: string, schema: Schema, database: { db: SQLite; opt: DatabaseConfig }) {
-    super(database);
+  constructor(table: string, schema: Schema, database: RunerInit) {
+    this.runner = new Runner(database);
     this.buider = new QueryBuilder();
     this.table = table.toUpperCase();
     this.schema = schema;
@@ -30,14 +31,14 @@ export class Repository extends Runner {
     const fillEntity = this.fill(entity);
     const sql = this.buider.insertOrReplace(this.table, fillEntity);
     const params = Object.values(fillEntity);
-    return this.executeSql(sql, params);
+    return this.runner.executeSql(sql, params);
   }
 
   saveMany<T extends Object>(entitys: T[]) {
     const fillEntitys = entitys.map((entity) => this.fill(entity));
     const sqls = fillEntitys.map((entity) => this.buider.insertOrReplace(this.table, entity));
     const params = fillEntitys.map((entity) => Object.values(entity));
-    return this.executeBulkSql(sqls, params);
+    return this.runner.executeBulkSql(sqls, params);
   }
 
   find<T extends Object>(where: T) {}
@@ -46,6 +47,6 @@ export class Repository extends Runner {
 
   createTable() {
     const sql = this.buider.createTable(this.table, this.schema);
-    return this.executeSql(sql);
+    return this.runner.executeSql(sql);
   }
 }

@@ -48,3 +48,5 @@ type openDatabase = (
   size?: number,
   callback?: () => any,
 ) => Database;
+
+type RunerInit = { sqlite: SQLite; opt: DatabaseConfig };

@@ -1,14 +1,21 @@
-import { Database, DatabaseConfig, SQLite } from './type';
+import { Database, DatabaseConfig, RunerInit, SQLite } from './type';
 
 export class Runner {
-  protected database: Database;
-  constructor({ db, opt }: { db: SQLite; opt: DatabaseConfig }) {
-    this.database = db.openDatabase(opt);
+  protected sqlite: SQLite;
+  protected opt: DatabaseConfig;
+
+  constructor(init: RunerInit) {
+    this.sqlite = init.sqlite;
+    this.opt = init.opt;
   }
 
-  protected executeBulkSql(sqls: Array<string>, params: Array<string[]>) {
+  get openDatabase() {
+    return this.sqlite.openDatabase(this.opt);
+  }
+
+  executeBulkSql(sqls: Array<string>, params: Array<string[]>) {
     return new Promise((txResolve, txReject) => {
-      this.database.transaction((tx) => {
+      this.openDatabase.transaction((tx) => {
         Promise.all(
           sqls.map((sql, index) => {
             return new Promise((sqlResolve, sqlReject) => {
@@ -31,7 +38,7 @@ export class Runner {
     });
   }
 
-  protected executeSql(sql: string, params: Array<string> = []) {
+  executeSql(sql: string, params: Array<string> = []) {
     return this.executeBulkSql([sql], [params]);
   }
 }
