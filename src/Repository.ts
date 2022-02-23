@@ -1,6 +1,5 @@
 import { Schema } from './Schema';
-import { Runner } from './Runner';
-import { Database, DatabaseConfig, FieldWhere, RunerInit, SQLite, WhereRecord } from './type';
+import { Runner, RunnerInit } from './Runner';
 import { QueryBuilder } from './QueryBuilder';
 export class Repository {
   protected table: string;
@@ -8,7 +7,7 @@ export class Repository {
   protected buider: QueryBuilder;
   protected runner: Runner;
 
-  constructor(table: string, schema: Schema, database: RunerInit) {
+  constructor(table: string, schema: Schema, database: RunnerInit) {
     this.runner = new Runner(database);
     this.buider = new QueryBuilder();
     this.table = table.toUpperCase();
@@ -20,13 +19,23 @@ export class Repository {
 
     this.schema.fields.forEach((item) => {
       const key = item[0];
-      const { parseToObj } = item[1];
+      const { parseToBase } = item[1];
 
       if (Object.keys(props).includes(key)) {
-        entity[key] = parseToObj(props[key]);
+        entity[key] = parseToBase(props[key]);
       }
     });
 
+    return entity;
+  }
+
+  protected parse(obj: Record<string, any>) {
+    const entity: Record<string, any> = {};
+    this.schema.fields.forEach((item) => {
+      const key = item[0];
+      const { parseToObj } = item[1];
+      entity[key] = parseToObj(obj[key]);
+    });
     return entity;
   }
 
@@ -44,19 +53,19 @@ export class Repository {
     return this.runner.executeBulkSql(sqls, params);
   }
 
-  find(where: WhereRecord<string> = {}) {
+  find(where = {}) {
     const sql = this.buider.find(this.table, where);
     const params = Object.values(where);
-    return this.runner.executeSql(sql, params).then(({ rows }) => rows);
+    return this.runner.executeSql(sql, params).then(({ rows }) => rows.map((item) => this.parse(item)));
   }
 
-  findOne(where: WhereRecord<string> = {}) {
+  findOne(where = {}) {
     const sql = this.buider.findOne(this.table, where);
     const params = Object.values(where);
-    return this.runner.executeSql(sql, params).then(({ rows }) => rows[0]);
+    return this.runner.executeSql(sql, params).then(({ rows }) => this.parse(rows[0]));
   }
 
-  destroy(where: WhereRecord<string>) {
+  destroy(where: Record<string, any>) {
     const sql = this.buider.destroy(this.table, where);
     const params = Object.values(where);
     return this.runner.executeSql(sql, params);

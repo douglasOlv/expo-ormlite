@@ -1,19 +1,17 @@
 /* tslint:disable:max-classes-per-file */
 import { Repository } from './Repository';
+import { RunnerInit } from './Runner';
 import { Schema } from './Schema';
-import { SQLite, Database, DatabaseConfig, RunerInit } from './type';
+import { SQLite, Database, DatabaseConfig } from './type';
 
 export class OrmLite {
-  protected SQLite: SQLite;
-  protected opt: DatabaseConfig;
+  protected database: RunnerInit;
 
   constructor(SQLite: SQLite, options: DatabaseConfig) {
-    this.SQLite = SQLite;
-    this.opt = options;
+    this.database = new RunnerInit(SQLite, options);
   }
 
   model(name: string, schema: Schema): Repository {
-    const database: RunerInit = { sqlite: this.SQLite, opt: this.opt };
-    return new Repository(name, schema, database);
+    return new Repository(name, schema, this.database);
   }
 }

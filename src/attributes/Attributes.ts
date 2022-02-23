@@ -26,27 +26,31 @@ export abstract class Attributes {
     return ' '.concat(field.join(' '));
   }
 
- get allowNull() {
+  get allowNull() {
     this.isNullable = true;
     return this;
   }
 
- get autoIncrement() {
+  get autoIncrement() {
     this.isAutoincrement = true;
     return this;
   }
 
- get primaryKey() {
+  get primaryKey() {
     this.isPrimary = true;
     return this;
   }
 
- get unique() {
+  get unique() {
     this.isUnique = true;
     return this;
   }
 
   parseToObj(value: any) {
+    return value;
+  }
+
+  parseToBase(value: any) {
     return value;
   }
 }

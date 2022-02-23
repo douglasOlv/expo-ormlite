@@ -1,5 +1,5 @@
 import { Schema } from '.';
-import { FieldWhere, OpWhere } from './type';
+import { OpWhere } from './type';
 
 export class QueryBuilder {
   insert<T extends Object>(table: string, obj: T) {
@@ -44,7 +44,7 @@ export class QueryBuilder {
     return this.find(table, opt).replace(';', ' LIMIT 1;');
   }
 
-  private getPropertyOperator(statement: FieldWhere<any>) {
+  private getPropertyOperator(statement: any) {
     const operations: Record<OpWhere, string> = {
       eq: '=',
       neq: '<>',

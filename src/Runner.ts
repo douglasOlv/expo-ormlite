@@ -1,12 +1,22 @@
-import { Database, DatabaseConfig, RowSql, RunerInit, SQLite } from './type';
+import { Database, DatabaseConfig, RowSql, SQLite } from './type';
+
+export class RunnerInit {
+  sqlite: SQLite;
+  opt: DatabaseConfig;
+
+  constructor(sqlite: SQLite, opt: DatabaseConfig) {
+    this.sqlite = sqlite;
+    this.opt = opt;
+  }
+}
 
 export class Runner {
   protected sqlite: SQLite;
   protected opt: DatabaseConfig;
 
-  constructor(init: RunerInit) {
-    this.sqlite = init.sqlite;
-    this.opt = init.opt;
+  constructor({ sqlite, opt }: RunnerInit) {
+    this.sqlite = sqlite;
+    this.opt = opt;
   }
 
   get openDatabase() {

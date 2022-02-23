@@ -49,8 +49,5 @@ type openDatabase = (
   callback?: () => any,
 ) => Database;
 
-type RunerInit = { sqlite: SQLite; opt: DatabaseConfig };
 type RowSql = { rows: any[]; insertId: number };
 type OpWhere = 'eq' | 'neq' | 'lt' | 'lteq' | 'gt' | 'gteq' | 'like';
-type FieldWhere<F extends string> = `${F}_${OpWhere}` | F;
-type WhereRecord<F extends string> = Record<FieldWhere<F>, any>;
