@@ -36,6 +36,15 @@ describe('Query Buider', () => {
     expect(sql).toBe(expected);
   });
 
+  test('update', () => {
+    const expected = 'UPDATE USERS SET born = ?, name = ? WHERE id = ?;';
+    const obj = { id: 1, born: '1815-12-10', name: 'Ada Lovelace' };
+
+    const pk = 'id';
+    const sql = builder.update(table, pk, obj);
+    expect(sql).toBe(expected);
+  });
+
   test('find register', () => {
     const expected = 'SELECT * FROM USERS WHERE born >= ? AND post_id = ? LIMIT 1;';
     const where = { born_gteq: '1912-06-23', post_id_eq: 2 };

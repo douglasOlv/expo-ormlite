@@ -14,6 +14,14 @@ export class QueryBuilder {
     return this.insert(table, obj).replace('INSERT INTO', 'INSERT OR REPLACE INTO');
   }
 
+  update(table: string, pk: string, obj: Record<string, any>) {
+    const fieldsToUpdate = Object.keys(obj)
+      .filter((key) => key !== pk)
+      .map((key) => `${key} = ?`);
+
+    return `UPDATE ${table} SET ${fieldsToUpdate.join(', ')} WHERE ${pk} = ?;`;
+  }
+
   createTable(table: string, schema: Schema) {
     const columns = schema.fields
       .map((field) => {

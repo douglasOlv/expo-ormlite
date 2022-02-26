@@ -26,6 +26,11 @@ export abstract class Attributes {
     return ' '.concat(field.join(' '));
   }
 
+  /** @internal */
+  get isPrimaryKey() {
+    return this.isPrimary;
+  }
+
   get allowNull() {
     this.isNullable = true;
     return this;

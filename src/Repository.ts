@@ -14,7 +14,7 @@ export class Repository {
     this.schema = schema;
   }
 
-  protected fill(props: Record<string, any>) {
+  protected sanetize(props: Record<string, any>) {
     const entity: Record<string, any> = {};
 
     this.schema.fields.forEach((item) => {
@@ -40,16 +40,26 @@ export class Repository {
   }
 
   save<T extends Object>(entity: T) {
-    const fillEntity = this.fill(entity);
-    const sql = this.buider.insertOrReplace(this.table, fillEntity);
-    const params = Object.values(fillEntity);
+    const _entity = this.sanetize(entity);
+    const sql = this.buider.insertOrReplace(this.table, _entity);
+    const params = Object.values(_entity);
     return this.runner.executeSql(sql, params).then(({ insertId }) => insertId);
   }
 
+  update(entity: Record<string, any>) {
+    const pk = this.schema.namePrimaryKey;
+    if (pk && entity[pk]) {
+      const _entity = this.sanetize(entity);
+      const sql = this.buider.update(this.table, pk, _entity);
+      const values = Object.values(_entity).filter((v) => v !== _entity[pk]);
+      return this.runner.executeSql(sql, [...values, _entity[pk]]);
+    }
+  }
+
   saveMany<T extends Object>(entitys: T[]) {
-    const fillEntitys = entitys.map((entity) => this.fill(entity));
-    const sqls = fillEntitys.map((entity) => this.buider.insertOrReplace(this.table, entity));
-    const params = fillEntitys.map((entity) => Object.values(entity));
+    const _entitys = entitys.map((entity) => this.sanetize(entity));
+    const sqls = _entitys.map((entity) => this.buider.insertOrReplace(this.table, entity));
+    const params = _entitys.map((entity) => Object.values(entity));
     return this.runner.executeBulkSql(sqls, params);
   }
 
