@@ -51,7 +51,10 @@ export class Repository {
     if (pk && entity[pk]) {
       const _entity = this.sanetize(entity);
       const sql = this.buider.update(this.table, pk, _entity);
-      const values = Object.values(_entity).filter((v) => v !== _entity[pk]);
+      const values = Object.keys(_entity)
+        .filter((key) => key !== pk)
+        .map((key) => _entity[key]);
+
       return this.runner.executeSql(sql, [...values, _entity[pk]]);
     }
   }
