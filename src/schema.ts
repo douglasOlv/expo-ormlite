@@ -11,9 +11,9 @@ export class Schema {
   }
 
   /** @internal */
-  get namePrimaryKey(){
-   const field = this.fields.find(field => field[1].isPrimaryKey)
-   if(field) return field[0];
-  return false
+  get namePrimaryKey() {
+    const field = this.fields.find((field) => field[1].isPrimaryKey);
+    if (field) return field[0];
+    return false;
   }
 }
